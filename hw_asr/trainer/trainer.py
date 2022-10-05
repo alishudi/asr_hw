@@ -182,6 +182,7 @@ class Trainer(BaseTrainer):
             self._log_scalars(self.evaluation_metrics)
             self._log_predictions(**batch)
             self._log_spectrogram(batch["spectrogram"])
+            self._log_audio(batch['audio'][0])
 
         # add histogram of model parameters to the tensorboard
         for name, p in self.model.named_parameters():
@@ -259,3 +260,6 @@ class Trainer(BaseTrainer):
             return
         for metric_name in metric_tracker.keys():
             self.writer.add_scalar(f"{metric_name}", metric_tracker.avg(metric_name))
+
+    def _log_audio(self, audio):
+        self.writer.add_audio("audio", audio, sample_rate=16000)
