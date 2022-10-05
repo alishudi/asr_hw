@@ -264,7 +264,7 @@ class Trainer(BaseTrainer):
     def _log_audio(self, batch, ind):
         self.writer.add_audio("audio", batch["audio"][ind], sample_rate=16000)
         argmax_inds = batch["log_probs"][ind].cpu().argmax(-1).numpy()
-        argmax_inds = argmax_inds[: int(batch["log_probs_length"].numpy())]
+        argmax_inds = argmax_inds[: int(batch["log_probs_length"][ind].numpy())]
         decoded_text = self.text_encoder.ctc_decode(argmax_inds)
         target = BaseTextEncoder.normalize_text(batch["text"][ind])
         rows = {ind: {
