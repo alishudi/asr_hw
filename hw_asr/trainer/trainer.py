@@ -268,7 +268,7 @@ class Trainer(BaseTrainer):
         decoded_text = self.text_encoder.ctc_decode(argmax_inds)
         target = BaseTextEncoder.normalize_text(batch["text"][ind])
         rows = {ind: {
-            'prediction' : decoded_text,
-            'target' : target
+            'target' : target,
+            'prediction' : decoded_text
             }}
         self.writer.add_table("audio_prediction", pd.DataFrame.from_dict(rows, orient="index"))
