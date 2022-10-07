@@ -23,12 +23,12 @@ class GroupLengthBatchSampler(Sampler):
         
 
     def __iter__(self):
-        if self.sort_groups:
-            groups_order = list(range(self.n_groups))
-        else:
-            groups_order = shuffle(list(range(self.n_groups)))
+        groups_order = list(range(self.n_groups))
+        if not self.sort_groups:
+            shuffle(groups_order)
         for group_idx in groups_order:
-            group = shuffle(self.idxs[group_idx * self.group_size: (group_idx + 1) * self.group_size])
+            group = self.idxs[group_idx * self.group_size: (group_idx + 1) * self.group_size]
+            shuffle(group)
             for i in range(self.batches_per_group):
                 yield(group[i * self.batch_size: (i + 1) * self.batch_size])
 
