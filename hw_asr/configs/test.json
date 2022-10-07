@@ -25,7 +25,11 @@
       "train": {
         "batch_sampler": {
             "type": "GroupLengthBatchSampler",
-            "batch_size": 40
+            "args": {
+                "batch_size": 40,
+                "batches_per_group": 20,
+                "sort_groups": false
+              }
         },
         "num_workers": 5,
         "datasets": [
