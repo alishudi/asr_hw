@@ -54,10 +54,17 @@ def get_dataloaders(configs: ConfigParser, text_encoder: BaseTextEncoder):
             f"Batch size ({bs}) shouldn't be larger than dataset length ({len(dataset)})"
 
         # create dataloader
-        dataloader = DataLoader(
-            dataset, batch_size=bs, collate_fn=collate_fn,
-            shuffle=shuffle, num_workers=num_workers,
-            batch_sampler=batch_sampler, drop_last=drop_last
-        )
+        if "batch_sampler" in params:
+            dataloader = DataLoader(
+                dataset, collate_fn=collate_fn,
+                num_workers=num_workers, 
+                batch_sampler=batch_sampler
+            )
+        else:
+            dataloader = DataLoader(
+                dataset, batch_size=bs, collate_fn=collate_fn,
+                shuffle=shuffle, num_workers=num_workers,
+                batch_sampler=batch_sampler, drop_last=drop_last
+            )
         dataloaders[split] = dataloader
     return dataloaders
