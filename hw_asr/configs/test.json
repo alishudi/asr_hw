@@ -24,6 +24,7 @@
     "data": {
       "train": {
         "batch_sampler": {
+            "type": "GroupLengthBatchSampler",
             "batch_size": 40
         },
         "num_workers": 5,
