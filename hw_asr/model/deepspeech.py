@@ -10,14 +10,15 @@ class DeepSpeech2(BaseModel):
         super().__init__(n_feats, n_class, **batch)
 
         self.conv = Sequential(
-            nn.Conv2d(1, 32, (41, 11), (2, 2), padding="same"),
+            nn.Conv2d(1, 32, (41, 11), 2, padding=(20, 5)), #ebal padding v tf
             nn.BatchNorm2d(32, eps=1e-3, momentum=0.99),
             nn.ReLU(),
-            nn.Conv2d(32, 32, (21, 11), (2, 1), padding="same"),
+            nn.Conv2d(32, 32, (21, 11), (2, 1), padding=(10, 5)), 
             nn.BatchNorm2d(32, eps=1e-3, momentum=0.99),
             nn.ReLU()
             )
         self.gru = nn.GRU(
+            input_size=1024,
             num_layers=5,
             hidden_size=800,
             bidirectional=True,
@@ -30,15 +31,17 @@ class DeepSpeech2(BaseModel):
         )
 
     def forward(self, spectrogram, **batch):
-        x = spectrogram
+        x = spectrogram.unsqueeze(dim=1)
         print(x.shape)
         x = self.conv(x)
+        print(x.shape)
+        x = x.view(x.shape[0], x.shape[1] * x.shape[2], -1).transpose(1, 2)
         print(x.shape)
         x, _ = self.gru(x)
         print(x.shape)
         x = self.head(x)
-
+        print(x.shape)
         return {"logits": x}
 
     def transform_input_lengths(self, input_lengths):
-        return input_lengths  # we don't reduce time dimension here
+        return input_lengths // 2
