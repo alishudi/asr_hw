@@ -32,15 +32,10 @@ class DeepSpeech2(BaseModel):
 
     def forward(self, spectrogram, **batch):
         x = spectrogram.unsqueeze(dim=1)
-        print(x.shape)
         x = self.conv(x)
-        print(x.shape)
         x = x.view(x.shape[0], x.shape[1] * x.shape[2], -1).transpose(1, 2)
-        print(x.shape)
         x, _ = self.gru(x)
-        print(x.shape)
         x = self.head(x)
-        print(x.shape)
         return {"logits": x}
 
     def transform_input_lengths(self, input_lengths):
