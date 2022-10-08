@@ -15,10 +15,9 @@
     "spectrogram": []
   },
   "arch": {
-    "type": "BaselineModel",
+    "type": "DeepSpeech2",
     "args": {
-      "n_feats": 128,
-      "fc_hidden": 512
+      "n_feats": 128
     }
   },
   "data": {
