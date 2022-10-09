@@ -10,7 +10,7 @@ class DeepSpeech2(BaseModel):
         super().__init__(n_feats, n_class, **batch)
 
         self.conv = Sequential(
-            nn.Conv2d(1, 32, (41, 11), 2, padding=(20, 5)), #ebal padding v tf
+            nn.Conv2d(1, 32, (41, 11), 2, padding=(20, 5)),
             nn.BatchNorm2d(32, eps=1e-3, momentum=0.99),
             nn.ReLU(),
             nn.Conv2d(32, 32, (21, 11), (2, 1), padding=(10, 5)), 
@@ -18,7 +18,7 @@ class DeepSpeech2(BaseModel):
             nn.ReLU()
             )
         self.gru = nn.GRU(
-            input_size=1024,
+            input_size=n_feats * 32,
             num_layers=5,
             hidden_size=800,
             bidirectional=True,
