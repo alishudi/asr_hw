@@ -44,7 +44,7 @@
         ]
       },
       "val": {
-        "batch_size": 16,
+        "batch_size": 32,
         "num_workers": 5,
         "datasets": [
           {
@@ -83,23 +83,23 @@
     "lr_scheduler": {
       "type": "OneCycleLR",
       "args": {
-        "steps_per_epoch": 100,
-        "epochs": 51,
+        "steps_per_epoch": 200,
+        "epochs": 21,
         "anneal_strategy": "cos",
         "max_lr": 1e-3,
-        "pct_start": 0.05
+        "pct_start": 0.1
       }
     },
     "trainer": {
-      "epochs": 50,
+      "epochs": 20,
       "save_dir": "saved/",
       "save_period": 5,
       "verbosity": 2,
       "monitor": "min val_loss",
-      "early_stop": 100,
+      "early_stop": 150,
       "visualize": "wandb",
       "wandb_project": "asr_project",
-      "len_epoch": 100,
+      "len_epoch": 200,
       "grad_norm_clip": 10
     }
   }
