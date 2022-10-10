@@ -1,4 +1,5 @@
 from typing import List, NamedTuple
+from collections import defaultdict
 
 import torch
 
@@ -44,7 +45,7 @@ class CTCCharTextEncoder(CharTextEncoder):
         paths = {('', self.EMPTY_TOK): 1}
         for i in range(probs_length):
             #extend and merge
-            new_paths = {}
+            new_paths = defaultdict(float)
             for next_char_ind, next_char_prob in enumerate(probs[i]):
                 next_char = self.ind2char[next_char_ind]
                 for (text, last_char), path_prob in paths.items():
