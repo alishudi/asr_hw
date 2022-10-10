@@ -29,7 +29,7 @@
         }
       },
       {
-        "type": "Gain",
+        "type": "TimeStretch",
         "args": {
           "min_rate": 0.95,
           "max_rate": 1.05,

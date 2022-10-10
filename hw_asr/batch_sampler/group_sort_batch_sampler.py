@@ -7,7 +7,7 @@ class GroupLengthBatchSampler(Sampler):
     def __init__(self, data_source, batch_size, batches_per_group=20, sort_groups=False):
         #if sort_groups=True then groups are iterated from shortest to longest, like SortaGrad in DeepSpeech2 
         super().__init__(data_source)
-        # TODO: your code here (optional)
+        
         self.data_source = data_source
         self.batch_size = batch_size
         self.batches_per_group = batches_per_group

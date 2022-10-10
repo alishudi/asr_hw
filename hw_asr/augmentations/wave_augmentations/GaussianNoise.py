@@ -2,12 +2,11 @@ import audiomentations
 from torch import Tensor
 
 from hw_asr.augmentations.base import AugmentationBase
-from hw_asr.augmentations.random_apply import RandomApply
 
 
 class GaussianNoise(AugmentationBase):
-    def __init__(self, p=0.2, *args, **kwargs):
-        self._aug = RandomApply(audiomentations.AddGaussianNoise(*args, **kwargs), p)
+    def __init__(self, *args, **kwargs):
+        self._aug = audiomentations.AddGaussianNoise(*args, **kwargs)
 
 
     def __call__(self, data: Tensor):

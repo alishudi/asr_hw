@@ -1,4 +1,5 @@
-from torch import Tensor, transforms
+from torch import Tensor
+from torchaudio import transforms
 
 from hw_asr.augmentations.base import AugmentationBase
 from hw_asr.augmentations.random_apply import RandomApply

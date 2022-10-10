@@ -9,5 +9,5 @@ class TimeStretch(AugmentationBase):
         self._aug = audiomentations.TimeStretch(*args, **kwargs)
 
     def __call__(self, data: Tensor):
-        x = data.unsqueeze(1)
-        return self._aug(x, sample_rate=16000).squeeze(1)
+        x = data.unsqueeze(1).numpy()
+        return Tensor(self._aug(x, sample_rate=16000)).squeeze(1)
