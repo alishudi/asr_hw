@@ -39,6 +39,22 @@ class CTCCharTextEncoder(CharTextEncoder):
         char_length, voc_size = probs.shape
         assert voc_size == len(self.ind2char)
         hypos: List[Hypothesis] = []
-        # TODO: your code here
-        raise NotImplementedError
+        # mostly copied from the seminar
+
+        paths = {('', self.EMPTY_TOK): 1}
+        for i in range(probs_length):
+            #extend and merge
+            new_paths = {}
+            for next_char_ind, next_char_prob in enumerate(probs[i]):
+                next_char = self.ind2char[next_char_ind]
+                for (text, last_char), path_prob in paths.items():
+                    new_prefix = text if next_char == last_char else (text + last_char)
+                    new_prefix = new_prefix.replace(self.EMPTY_TOK, '')
+                    new_paths[(new_prefix, next_char)] += path_prob * next_char_prob
+            paths = new_paths
+
+            #truncate beam
+            paths = dict(sorted(paths.items(), key=lambda x: x[1])[-beam_size:])
+
+        return [Hypothesis(prefix, score) for (prefix, _), score in sorted(paths.items(), key=lambda x: -x[1])]
         return sorted(hypos, key=lambda x: x.prob, reverse=True)
