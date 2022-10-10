@@ -34,7 +34,7 @@ class BeamsearchCERMetric(BaseMetric):
 
     def __call__(self, log_probs: Tensor, log_probs_length: Tensor, text: List[str], **kwargs):
         cers = []
-        probs = log_probs.cpu().numpy()
+        probs = log_probs.detach().numpy()
         lengths = log_probs_length.detach().numpy()
         for log_prob_vec, length, target_text in zip(probs, lengths, text):
             target_text = BaseTextEncoder.normalize_text(target_text)
