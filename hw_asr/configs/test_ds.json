@@ -26,8 +26,8 @@
         "batch_sampler": {
             "type": "GroupLengthBatchSampler",
             "args": {
-                "batch_size": 16,
-                "batches_per_group": 30,
+                "batch_size": 32,
+                "batches_per_group": 20,
                 "sort_groups": false
               }
         },

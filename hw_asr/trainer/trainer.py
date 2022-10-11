@@ -237,13 +237,13 @@ class Trainer(BaseTrainer):
             }
             if len(self.metrics) > 2: #change #checking if using bs 
                 bs_res = self.text_encoder.ctc_beam_search(prob, prob_length)
-                rows[Path(audio_path).name] = {
+                rows_bs[Path(audio_path).name] = {
                     "target": target,
                     "bs pred #1": bs_res[0].text,
                     "bs pred #2": bs_res[1].text,
                     "bs pred #3": bs_res[2].text,
-                    "wer": [calc_wer(target, bs_pred.text) * 100 for bs_pred in bs_res[:3]],
-                    "wer": [calc_cer(target, bs_pred.text) * 100 for bs_pred in bs_res[:3]],
+                    "wer": str([calc_wer(target, bs_pred.text) * 100 for bs_pred in bs_res[:3]]),
+                    "cer": str([calc_cer(target, bs_pred.text) * 100 for bs_pred in bs_res[:3]]),
                 }
 
         self.writer.add_table("argmax predictions", pd.DataFrame.from_dict(rows, orient="index"))
