@@ -210,7 +210,6 @@ class Trainer(BaseTrainer):
             *args,
             **kwargs,
     ):
-        # TODO: implement logging of beam search results
         if self.writer is None:
             return
         argmax_inds = log_probs.cpu().argmax(-1).numpy()
@@ -220,10 +219,11 @@ class Trainer(BaseTrainer):
         ]
         argmax_texts_raw = [self.text_encoder.decode(inds) for inds in argmax_inds]
         argmax_texts = [self.text_encoder.ctc_decode(inds) for inds in argmax_inds]
-        tuples = list(zip(argmax_texts, text, argmax_texts_raw, audio_path))
+        tuples = list(zip(argmax_texts, text, argmax_texts_raw, audio_path, log_probs, log_probs_length))
         shuffle(tuples)
         rows = {}
-        for pred, target, raw_pred, audio_path in tuples[:examples_to_log]:
+        rows_bs = {}
+        for pred, target, raw_pred, audio_path, prob, prob_length in tuples[:examples_to_log]:
             target = BaseTextEncoder.normalize_text(target)
             wer = calc_wer(target, pred) * 100
             cer = calc_cer(target, pred) * 100
@@ -235,7 +235,20 @@ class Trainer(BaseTrainer):
                 "wer": wer,
                 "cer": cer,
             }
-        self.writer.add_table("predictions", pd.DataFrame.from_dict(rows, orient="index"))
+            if len(self.metrics) > 2: #change #checking if using bs 
+                bs_res = self.text_encoder.ctc_beam_search(prob, prob_length)
+                rows[Path(audio_path).name] = {
+                    "target": target,
+                    "bs pred #1": bs_res[0].text,
+                    "bs pred #2": bs_res[1].text,
+                    "bs pred #3": bs_res[2].text,
+                    "wer": [calc_wer(target, bs_pred.text) * 100 for bs_pred in bs_res[:3]],
+                    "wer": [calc_cer(target, bs_pred.text) * 100 for bs_pred in bs_res[:3]],
+                }
+
+        self.writer.add_table("argmax predictions", pd.DataFrame.from_dict(rows, orient="index"))
+        if len(self.metrics) > 2: #change #checking if using bs   
+            self.writer.add_table("beamsearch predictions", pd.DataFrame.from_dict(rows_bs, orient="index"))
 
     def _log_spectrogram(self, spectrogram_batch):
         spectrogram = random.choice(spectrogram_batch.cpu())
