@@ -17,7 +17,7 @@
         "args": {
           "min_amplitude": 0.001,
           "max_amplitude": 0.015,
-          "p": 0.3
+          "p": 0.1
         }
       },
       {
@@ -25,7 +25,7 @@
         "args": {
           "min_gain_in_db": -18.0,
           "max_gain_in_db": 6.0,
-          "p": 0.2
+          "p": 0.1
         }
       },
       {
@@ -33,7 +33,7 @@
         "args": {
           "min_rate": 0.95,
           "max_rate": 1.05,
-          "p": 0.4
+          "p": 0.2
         }
       }
     ],
@@ -41,15 +41,15 @@
       {
         "type": "FrequencyMask",
         "args": {
-          "freq_mask_param": 40,
-          "pr": 0.2
+          "freq_mask_param": 20,
+          "pr": 0.05
         }
       },
       {
         "type": "TimeMask",
         "args": {
-          "time_mask_param": 50,
-          "pr": 0.2
+          "time_mask_param": 30,
+          "pr": 0.05
         }
       }
     ]
