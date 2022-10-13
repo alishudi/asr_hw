@@ -58,7 +58,6 @@ class Trainer(BaseTrainer):
         self.evaluation_metrics = MetricTracker(
             "loss", *[m.name for m in self.metrics], writer=self.writer
         )
-        print([m.name for m in self.metrics if m.name not in ["WER (Beamsearch)", "CER (Beamsearch)"]], [m.name for m in self.metrics])
 
     @staticmethod
     def move_batch_to_device(batch, device: torch.device):
@@ -155,8 +154,9 @@ class Trainer(BaseTrainer):
                 self.lr_scheduler.step()
 
         metrics.update("loss", batch["loss"].item())
-        for met in self.metrics:
-            metrics.update(met.name, met(**batch))
+        for met in metrics:
+            if met not in ["loss", "grad norm"]:
+                metrics.update(met.name, met(**batch))
         return batch
 
     def _evaluation_epoch(self, epoch, part, dataloader):
@@ -237,7 +237,7 @@ class Trainer(BaseTrainer):
                 "wer": wer,
                 "cer": cer,
             }
-            if len(self.metrics) > 2 and is_val: #change #checking if using bs 
+            if is_val: #change #checking if using bs 
                 bs_res = self.text_encoder.ctc_beam_search(prob, prob_length)
                 rows_bs[Path(audio_path).name] = {
                     "target": target,
@@ -249,7 +249,7 @@ class Trainer(BaseTrainer):
                 }
 
         self.writer.add_table("argmax predictions", pd.DataFrame.from_dict(rows, orient="index"))
-        if len(self.metrics) > 2 and is_val: #change #checking if using bs   
+        if is_val: #change #checking if using bs   
             self.writer.add_table("beamsearch predictions", pd.DataFrame.from_dict(rows_bs, orient="index"))
 
     def _log_spectrogram(self, spectrogram_batch):
