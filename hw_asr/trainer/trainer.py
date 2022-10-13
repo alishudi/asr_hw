@@ -52,7 +52,6 @@ class Trainer(BaseTrainer):
         self.lr_scheduler = lr_scheduler
         self.log_step = 50
 
-        self.metrics_list = [m.name for m in self.metrics]
         self.train_metrics = MetricTracker(
             "loss", "grad norm", *[m.name for m in self.metrics if m.name not in ["WER (Beamsearch)", "CER (Beamsearch)"]], writer=self.writer
         )
@@ -155,8 +154,8 @@ class Trainer(BaseTrainer):
                 self.lr_scheduler.step()
 
         metrics.update("loss", batch["loss"].item())
-        for met in self.metrics_list:
-            if met not in ["loss", "grad norm"]:
+        for met in self.metrics:
+            if met.name not in ["WER (Beamsearch)", "CER (Beamsearch)"]:
                 metrics.update(met.name, met(**batch))
         return batch
 
