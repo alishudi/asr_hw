@@ -242,8 +242,8 @@ class Trainer(BaseTrainer):
                 rows_bs[Path(audio_path).name] = {
                     "target": target,
                     "bs pred #1": bs_res[0].text,
-                    "bs pred #2": bs_res[1].text,
-                    "bs pred #3": bs_res[2].text,
+                    "bs pred #2": bs_res[1].text if len(bs_res) > 1 else "",
+                    "bs pred #3": bs_res[2].text if len(bs_res) > 2 else "",
                     "wer": str([calc_wer(target, bs_pred.text) * 100 for bs_pred in bs_res[:3]]),
                     "cer": str([calc_cer(target, bs_pred.text) * 100 for bs_pred in bs_res[:3]]),
                 }
