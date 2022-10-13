@@ -15,7 +15,7 @@ class Hypothesis(NamedTuple):
 
 
 class CTCCharTextEncoder(CharTextEncoder):
-    EMPTY_TOK = "^"
+    EMPTY_TOK = "" #pyctcdecoder doesnt recognize "^"
 
     def __init__(self, alphabet: List[str] = None):
         super().__init__(alphabet)
