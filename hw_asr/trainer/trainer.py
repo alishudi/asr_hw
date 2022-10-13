@@ -238,7 +238,7 @@ class Trainer(BaseTrainer):
                 "cer": cer,
             }
             if is_val: #change #checking if using bs 
-                bs_res = self.text_encoder.ctc_beam_search(prob, prob_length)
+                bs_res = self.text_encoder.ctc_beam_search(prob.cpu().detach().numpy(), prob_length)
                 rows_bs[Path(audio_path).name] = {
                     "target": target,
                     "bs pred #1": bs_res[0].text,
