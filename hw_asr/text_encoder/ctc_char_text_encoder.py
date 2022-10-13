@@ -54,7 +54,6 @@ class CTCCharTextEncoder(CharTextEncoder):
         char_length, voc_size = probs.shape
         assert voc_size == len(self.ind2char)
 
-        print(probs[:probs_length].shape, probs[:probs_length])
-        beams = self.bs_lm.decode_beams(probs[:probs_length], beam_width=beam_size)
+        beams = self.bs_lm.decode_beams(probs[:probs_length].numpy(), beam_width=beam_size)
         hypos = [Hypothesis(text, combined_score) for text, _, _, _, combined_score in beams]
         return hypos
