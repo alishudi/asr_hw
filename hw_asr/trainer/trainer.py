@@ -58,6 +58,7 @@ class Trainer(BaseTrainer):
         self.evaluation_metrics = MetricTracker(
             "loss", *[m.name for m in self.metrics], writer=self.writer
         )
+        print([m.name for m in self.metrics if m.name not in ["WER (Beamsearch)", "CER (Beamsearch)"]], [m.name for m in self.metrics])
 
     @staticmethod
     def move_batch_to_device(batch, device: torch.device):
