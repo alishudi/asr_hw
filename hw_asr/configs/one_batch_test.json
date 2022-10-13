@@ -11,8 +11,48 @@
     "log_spec": true
   },
   "augmentations": {
-    "wave": [],
-    "spectrogram": []
+    "wave": [
+      {
+        "type": "GaussianNoise",
+        "args": {
+          "min_amplitude": 0.001,
+          "max_amplitude": 0.015,
+          "p": 0.1
+        }
+      },
+      {
+        "type": "Gain",
+        "args": {
+          "min_gain_in_db": -18.0,
+          "max_gain_in_db": 6.0,
+          "p": 0.1
+        }
+      },
+      {
+        "type": "TimeStretch",
+        "args": {
+          "min_rate": 0.95,
+          "max_rate": 1.05,
+          "p": 0.2
+        }
+      }
+    ],
+    "spectrogram": [
+      {
+        "type": "FrequencyMask",
+        "args": {
+          "freq_mask_param": 20,
+          "pr": 0.05
+        }
+      },
+      {
+        "type": "TimeMask",
+        "args": {
+          "time_mask_param": 30,
+          "pr": 0.05
+        }
+      }
+    ]
   },
   "arch": {
     "type": "BaselineModel",
@@ -74,6 +114,18 @@
       "type": "ArgmaxCERMetric",
       "args": {
         "name": "CER (argmax)"
+      }
+    },
+    {
+      "type": "BeamsearchWERMetric",
+      "args": {
+        "name": "WER (Beamsearch)"
+      }
+    },
+    {
+      "type": "BeamsearchCERMetric",
+      "args": {
+        "name": "CER (Beamsearch)"
       }
     }
   ],
