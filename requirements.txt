@@ -16,3 +16,4 @@ torchaudio~=0.11.0
 pillow
 
 audiomentations[extras]
+https://github.com/kpu/kenlm/archive/master.zip

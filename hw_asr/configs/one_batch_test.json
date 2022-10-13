@@ -55,9 +55,10 @@
     ]
   },
   "arch": {
-    "type": "DeepSpeech2",
+    "type": "BaselineModel",
     "args": {
-      "n_feats": 128
+      "n_feats": 128,
+      "fc_hidden": 512
     }
   },
   "data": {

@@ -1,12 +1,9 @@
 from typing import List, NamedTuple
 from collections import defaultdict
-from pyctcdecode import build_ctcdecoder
-import kenlm
 
 import torch
 
 from .char_text_encoder import CharTextEncoder
-from hw_asr.utils.download_lm import load_lm
 
 
 class Hypothesis(NamedTuple):
@@ -22,17 +19,6 @@ class CTCCharTextEncoder(CharTextEncoder):
         vocab = [self.EMPTY_TOK] + list(self.alphabet)
         self.ind2char = dict(enumerate(vocab))
         self.char2ind = {v: k for k, v in self.ind2char.items()}
-
-        #load language model
-        lm_path, vocab_path = load_lm()
-        # load unigram list
-        with open(vocab_path) as f:
-            unigram_list = [t.lower() for t in f.read().strip().split("\n")]
-        self.bs_lm = build_ctcdecoder(
-            vocab,
-            str(lm_path),
-            unigram_list,
-        )
 
     def ctc_decode(self, inds: List[int]) -> str:
         decoded = []
@@ -53,7 +39,23 @@ class CTCCharTextEncoder(CharTextEncoder):
         assert len(probs.shape) == 2
         char_length, voc_size = probs.shape
         assert voc_size == len(self.ind2char)
+        hypos: List[Hypothesis] = []
+        # mostly copied from the seminar
 
-        beams = self.bs_lm.decode_beams(probs[:probs_length], beam_width=beam_size)
-        hypos = [Hypothesis(text, combined_score) for text, _, _, _, combined_score in beams]
-        return hypos
+        paths = {('', self.EMPTY_TOK): 1}
+        for i in range(probs_length):
+            #extend and merge
+            new_paths = defaultdict(float)
+            for next_char_ind, next_char_prob in enumerate(probs[i]):
+                next_char = self.ind2char[next_char_ind]
+                for (text, last_char), path_prob in paths.items():
+                    new_prefix = text if next_char == last_char else (text + last_char)
+                    new_prefix = new_prefix.replace(self.EMPTY_TOK, '')
+                    new_paths[(new_prefix, next_char)] += path_prob * next_char_prob
+            paths = new_paths
+
+            #truncate beam
+            paths = dict(sorted(paths.items(), key=lambda x: x[1])[-beam_size:])
+
+        return [Hypothesis(prefix, score) for (prefix, _), score in sorted(paths.items(), key=lambda x: -x[1])]
+        return sorted(hypos, key=lambda x: x.prob, reverse=True)

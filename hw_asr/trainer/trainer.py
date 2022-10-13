@@ -180,7 +180,7 @@ class Trainer(BaseTrainer):
                 )
             self.writer.set_step(epoch * self.len_epoch, part)
             self._log_scalars(self.evaluation_metrics)
-            self._log_predictions(**batch)
+            self._log_predictions(is_val=True, **batch)
             self._log_spectrogram(batch["spectrogram"])
             # self._log_audio(batch, random.randint(0, dataloader.batch_size - 1))
             self._log_audio(batch, random.randint(0, len(batch["audio"]) - 1))
@@ -206,7 +206,8 @@ class Trainer(BaseTrainer):
             log_probs,
             log_probs_length,
             audio_path,
-            examples_to_log=10,
+            examples_to_log=5,
+            is_val = False,
             *args,
             **kwargs,
     ):
@@ -235,7 +236,7 @@ class Trainer(BaseTrainer):
                 "wer": wer,
                 "cer": cer,
             }
-            if len(self.metrics) > 2: #change #checking if using bs 
+            if len(self.metrics) > 2 and is_val: #change #checking if using bs 
                 bs_res = self.text_encoder.ctc_beam_search(prob, prob_length)
                 rows_bs[Path(audio_path).name] = {
                     "target": target,
@@ -247,7 +248,7 @@ class Trainer(BaseTrainer):
                 }
 
         self.writer.add_table("argmax predictions", pd.DataFrame.from_dict(rows, orient="index"))
-        if len(self.metrics) > 2: #change #checking if using bs   
+        if len(self.metrics) > 2 and is_val: #change #checking if using bs   
             self.writer.add_table("beamsearch predictions", pd.DataFrame.from_dict(rows_bs, orient="index"))
 
     def _log_spectrogram(self, spectrogram_batch):
