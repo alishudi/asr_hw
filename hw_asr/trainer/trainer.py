@@ -155,7 +155,7 @@ class Trainer(BaseTrainer):
 
         metrics.update("loss", batch["loss"].item())
         for met in self.metrics:
-            if met.name not in ["WER (Beamsearch)", "CER (Beamsearch)"]:
+            if not is_train or (met.name not in ["WER (Beamsearch)", "CER (Beamsearch)"]):
                 metrics.update(met.name, met(**batch))
         return batch
 
