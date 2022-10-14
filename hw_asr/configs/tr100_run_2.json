@@ -121,10 +121,10 @@
       }
     ],
     "lr_scheduler": {
-      "type": "ReduceLROnPlateau",
+      "type": "STEPLR",
       "args": {
-        "factor": 0.5,
-        "patience": 30
+        "gamma ": 0.8,
+        "step_size": 600
       }
     },
     "trainer": {
