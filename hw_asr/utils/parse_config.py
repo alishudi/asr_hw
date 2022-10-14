@@ -90,7 +90,7 @@ class ConfigParser:
         modification = {
             opt.target: getattr(args, _get_opt_name(opt.flags)) for opt in options
         }
-        return cls(config, resume, load, modification)
+        return cls(config, resume, modification, load=load)
 
     @staticmethod
     def init_obj(obj_dict, default_module, *args, **kwargs):
