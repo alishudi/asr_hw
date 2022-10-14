@@ -1,5 +1,5 @@
 {
-    "name": "tr100_r1_config",
+    "name": "tr100_r2_config",
     "n_gpu": 1,
     "preprocessing": {
       "sr": 16000,
@@ -12,8 +12,48 @@
       "log_spec": true
     },
     "augmentations": {
-      "wave": [],
-      "spectrogram": []
+      "wave": [
+        {
+          "type": "GaussianNoise",
+          "args": {
+            "min_amplitude": 0.001,
+            "max_amplitude": 0.015,
+            "p": 0.1
+          }
+        },
+        {
+          "type": "Gain",
+          "args": {
+            "min_gain_in_db": -18.0,
+            "max_gain_in_db": 6.0,
+            "p": 0.1
+          }
+        },
+        {
+          "type": "TimeStretch",
+          "args": {
+            "min_rate": 0.95,
+            "max_rate": 1.05,
+            "p": 0.2
+          }
+        }
+      ],
+      "spectrogram": [
+        {
+          "type": "FrequencyMask",
+          "args": {
+            "freq_mask_param": 20,
+            "pr": 0.05
+          }
+        },
+        {
+          "type": "TimeMask",
+          "args": {
+            "time_mask_param": 30,
+            "pr": 0.05
+          }
+        }
+      ]
     },
     "arch": {
       "type": "DeepSpeech2",
@@ -38,7 +78,7 @@
             "args": {
               "part": "train-clean-100",
               "max_audio_length": 20.0,
-              "max_text_length": 200
+              "max_text_length": 300
             }
           }
         ]
@@ -59,7 +99,7 @@
     "optimizer": {
       "type": "Adam",
       "args": {
-        "lr": 1e-3
+        "lr": 4e-4
       }
     },
     "loss": {
@@ -81,13 +121,10 @@
       }
     ],
     "lr_scheduler": {
-      "type": "OneCycleLR",
+      "type": "ReduceLROnPlateau",
       "args": {
-        "steps_per_epoch": 300,
-        "epochs": 11,
-        "anneal_strategy": "cos",
-        "max_lr": 1e-3,
-        "pct_start": 0.15
+        "factor": 0.5,
+        "patience": 30
       }
     },
     "trainer": {
