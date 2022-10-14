@@ -152,7 +152,10 @@ class Trainer(BaseTrainer):
             self._clip_grad_norm()
             self.optimizer.step()
             if self.lr_scheduler is not None:
-                self.lr_scheduler.step()
+                if self.config.lr_scheduler.type == "ReduceLROnPlateau":
+                    self.lr_scheduler.step(batch["loss"].item())
+                else:
+                    self.lr_scheduler.step()
 
         metrics.update("loss", batch["loss"].item())
         for met in self.metrics:
