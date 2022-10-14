@@ -52,6 +52,7 @@ class Trainer(BaseTrainer):
         self.lr_scheduler = lr_scheduler
         self.log_step = 50
 
+        self.using_bs = "WER (Beamsearch)" in [m.name for m in self.metrics]
         self.train_metrics = MetricTracker(
             "loss", "grad norm", *[m.name for m in self.metrics if m.name not in ["WER (Beamsearch)", "CER (Beamsearch)"]], writer=self.writer
         )
@@ -237,7 +238,7 @@ class Trainer(BaseTrainer):
                 "wer": wer,
                 "cer": cer,
             }
-            if is_val: #change #checking if using bs 
+            if is_val and self.using_bs: 
                 bs_res = self.text_encoder.ctc_beam_search(prob.cpu().detach().numpy(), prob_length)
                 rows_bs[Path(audio_path).name] = {
                     "target": target,
@@ -249,7 +250,7 @@ class Trainer(BaseTrainer):
                 }
 
         self.writer.add_table("argmax predictions", pd.DataFrame.from_dict(rows, orient="index"))
-        if is_val: #change #checking if using bs   
+        if is_val and self.using_bs: 
             self.writer.add_table("beamsearch predictions", pd.DataFrame.from_dict(rows_bs, orient="index"))
 
     def _log_spectrogram(self, spectrogram_batch):
