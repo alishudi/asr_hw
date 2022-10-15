@@ -1,5 +1,5 @@
 {
-  "name": "test_config",
+  "name": "test_other_config",
   "n_gpu": 1,
   "preprocessing": {
     "sr": 16000,
@@ -55,6 +55,18 @@
         }
       ]
     },
+    "test_clean": {
+      "batch_size": 30,
+      "num_workers": 5,
+      "datasets": [
+        {
+          "type": "LibrispeechDataset",
+          "args": {
+            "part": "test-clean"
+          }
+        }
+      ]
+    },
     "test": {
       "batch_size": 30,
       "num_workers": 5,
@@ -89,6 +101,18 @@
       "type": "ArgmaxCERMetric",
       "args": {
         "name": "CER (argmax)"
+      }
+    },
+    {
+      "type": "BeamsearchWERMetric",
+      "args": {
+        "name": "WER (Beamsearch)"
+      }
+    },
+    {
+      "type": "BeamsearchCERMetric",
+      "args": {
+        "name": "CER (Beamsearch)"
       }
     }
   ],
