@@ -83,7 +83,7 @@
   "optimizer": {
     "type": "Adam",
     "args": {
-      "lr": 4e-4
+      "lr": 4e-8
     }
   },
   "loss": {
