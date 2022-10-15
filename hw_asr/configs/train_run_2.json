@@ -107,8 +107,7 @@
     "optimizer": {
       "type": "Adam",
       "args": {
-        "lr": 4e-4,
-        "weight_decay": 0.0005
+        "lr": 4e-4
       }
     },
     "loss": {
