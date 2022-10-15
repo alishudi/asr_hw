@@ -17,3 +17,4 @@ pillow
 
 audiomentations[extras]
 https://github.com/kpu/kenlm/archive/master.zip
+youtokentome

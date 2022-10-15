@@ -48,14 +48,6 @@
               "max_audio_length": 20.0,
               "max_text_length": 200
             }
-          },
-          {
-            "type": "LibrispeechDataset",
-            "args": {
-              "part": "train-other-500",
-              "max_audio_length": 20.0,
-              "max_text_length": 200
-            }
           }
         ]
       },
@@ -75,7 +67,8 @@
     "optimizer": {
       "type": "Adam",
       "args": {
-        "lr": 1e-3
+        "lr": 1e-3,
+        "weight_decay": 0.0005
       }
     },
     "loss": {
