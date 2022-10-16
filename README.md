@@ -5,6 +5,7 @@
 
 ```shell
 pip install -r ./requirements.txt
+python3 hw_asr/utils/util.py
 ```
 
 To test model on clean test:
