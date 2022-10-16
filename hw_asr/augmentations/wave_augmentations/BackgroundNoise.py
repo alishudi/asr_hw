@@ -21,7 +21,7 @@ class BackgroundNoise(AugmentationBase):
 
     def __call__(self, data: Tensor):
         x = data.unsqueeze(1).numpy()
-        print(x.shape)
+        # print(x.shape)
         return Tensor(self._aug(x, sample_rate=16000)).squeeze(1)
         # try:
         #     x = data.unsqueeze(1).numpy()
@@ -49,6 +49,7 @@ class BackgroundNoise(AugmentationBase):
             unzipped_path = data_dir / 'rirs_noises'
             if not os.path.exists(unzipped_path):
                 shutil.unpack_archive(gzip_path, unzipped_path)
+            return unzipped_path / 'RIRS_NOISES' / 'real_rirs_isotropic_noises'
         else:
             unzipped_path = data_dir / 'musan.tar'
             if not os.path.exists(unzipped_path):
