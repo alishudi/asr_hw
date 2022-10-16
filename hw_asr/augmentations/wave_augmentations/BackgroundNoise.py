@@ -5,7 +5,6 @@ from hw_asr.utils import ROOT_PATH
 import gzip
 import os, shutil
 from speechbrain.utils.data_utils import download_file
-import zipfile
 
 from hw_asr.augmentations.base import AugmentationBase
 
@@ -21,12 +20,15 @@ class BackgroundNoise(AugmentationBase):
         self._aug = torch_audiomentations.AddBackgroundNoise(background_paths=self.path, *args, **kwargs)
 
     def __call__(self, data: Tensor):
-        try:
-            x = data.unsqueeze(1).numpy()
-            return Tensor(self._aug(x, sample_rate=16000)).squeeze(1)
-        except:
-            x = data.numpy()
-            return Tensor(self._aug(x, sample_rate=16000))
+        x = data.unsqueeze(1).numpy()
+        print(x.shape)
+        return Tensor(self._aug(x, sample_rate=16000)).squeeze(1)
+        # try:
+        #     x = data.unsqueeze(1).numpy()
+        #     return Tensor(self._aug(x, sample_rate=16000)).squeeze(1)
+        # except:
+        #     x = data.numpy()
+        #     return Tensor(self._aug(x, sample_rate=16000))
 
     def prepare_noise(self, noise):
         assert noise in URL_LINKS
@@ -46,10 +48,7 @@ class BackgroundNoise(AugmentationBase):
         if noise == 'rirs':
             unzipped_path = data_dir / 'rirs_noises'
             if not os.path.exists(unzipped_path):
-                # unzipped_path.mkdir(exist_ok=True, parents=True)
                 shutil.unpack_archive(gzip_path, unzipped_path)
-                # with zipfile.ZipFile(gzip_path, 'r') as zip_ref:
-                #     zip_ref.extractall(unzipped_path)
         else:
             unzipped_path = data_dir / 'musan.tar'
             if not os.path.exists(unzipped_path):
