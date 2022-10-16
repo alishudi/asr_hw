@@ -14,7 +14,7 @@ URL_LINKS = {
     "rirs": "https://openslr.elda.org/resources/28/rirs_noises.zip"
 }
 
-#didnt test this augmentation properly, it might not work
+#didnt test downloading of musan data, it might not work
 class BackgroundNoise(AugmentationBase):
     def __init__(self, noise='rirs', *args, **kwargs):
         self.path = self.prepare_noise(noise)

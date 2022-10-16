@@ -55,6 +55,7 @@
     },
     "data": {
       "train": {
+        "batch_size": 10,
         "num_workers": 5,
         "datasets": [
           {
@@ -120,7 +121,7 @@
       "type": "StepLR",
       "args": {
         "gamma": 0.8,
-        "step_size": 1000
+        "step_size": 800
       }
     },
     "trainer": {
@@ -132,7 +133,7 @@
       "early_stop": 150,
       "visualize": "wandb",
       "wandb_project": "asr_project",
-      "len_epoch": 600,
+      "len_epoch": 400,
       "grad_norm_clip": 10
     }
   }
