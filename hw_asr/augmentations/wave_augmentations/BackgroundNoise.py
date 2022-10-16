@@ -48,7 +48,7 @@ class BackgroundNoise(AugmentationBase):
             if not os.path.exists(unzipped_path):
                 unzipped_path.mkdir(exist_ok=True, parents=True)
                 with zipfile.ZipFile(gzip_path, 'r') as zip_ref:
-                    zip_ref.extractall(unzipped_path = data_dir / 'rirs_noises')
+                    zip_ref.extractall(unzipped_path)
         else:
             unzipped_path = data_dir / 'musan.tar'
             if not os.path.exists(unzipped_path):
