@@ -27,7 +27,7 @@ class BackgroundNoise(AugmentationBase):
             x = data.numpy()
             return Tensor(self._aug(x, sample_rate=16000))
 
-    def prepare_noise(noise):
+    def prepare_noise(self, noise):
         assert noise in URL_LINKS
 
         data_dir = ROOT_PATH / "data" / noise
