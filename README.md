@@ -2,28 +2,26 @@
 
 ## Installation guide
 
-< Write your installation guide here >
 
 ```shell
 pip install -r ./requirements.txt
+
+!python3 test.py -c hw_asr/configs/test_clean.json -r /kaggle/working/1014_063424/checkpoint-epoch10.pth
 ```
 
-## Recommended implementation order
+To train the model run:
 
-You might be a little intimidated by the number of folders and classes. Try to follow this steps to gradually undestand
-the workflow.
-
-1) Test `hw_asr/tests/test_dataset.py`  and `hw_asr/tests/test_config.py` and make sure everythin works for you
-2) Implement missing functions to fix tests in  `hw_asr\tests\test_text_encoder.py`
-3) Implement missing functions to fix tests in  `hw_asr\tests\test_dataloader.py`
-4) Implement functions in `hw_asr\metric\utils.py`
-5) Implement missing function to run `train.py` with a baseline model
-6) Write your own model and try to overfit it on a single batch
-7) Implement ctc beam search and add metrics to calculate WER and CER over hypothesis obtained from beam search.
-8) ~~Pain and suffering~~ Implement your own models and train them. You've mastered this template when you can tune your
-   experimental setup just by tuning `configs.json` file and running `train.py`
-9) Don't forget to write a report about your work
-10) Get hired by Google the next day
+```shell
+python3 train.py -c hw_asr/configs/train_run_1.json
+python3 train.py -c hw_asr/configs/train_run_2.json -l <path to the model_best.pth from the last step>
+python3 train.py -c hw_asr/configs/train_run_3.json -l <path to the model_best.pth from the last step>
+python3 train.py -c hw_asr/configs/train_run_4.json -l <path to the model_best.pth from the last step>
+python3 train.py -c hw_asr/configs/train_run_5.json -l <path to the model_best.pth from the last step>
+python3 train.py -c hw_asr/configs/train_run_6.json -l <path to the model_best.pth from the last step>
+python3 train.py -c hw_asr/configs/train_run_6.json -l <path to the model_best.pth from the last step>
+python3 train.py -c hw_asr/configs/train_run_8.json -l <path to the model_best.pth from the last step>
+```
+Yes, you should use config train_run_6 twice, this is not a typo.
 
 ## Before submitting
 
@@ -71,12 +69,3 @@ Notes:
   the start of every docker run.
 * `-e WANDB_API_KEY=<your_wandb_api_key>` -- set envvar for wandb (if you want to use it). You can find your API key
   here: https://wandb.ai/authorize
-
-## TODO
-
-These barebones can use more tests. We highly encourage students to create pull requests to add more tests / new
-functionality. Current demands:
-
-* Tests for beam search
-* README section to describe folders
-* Notebook to show how to work with `ConfigParser` and `config_parser.init_obj(...)`
