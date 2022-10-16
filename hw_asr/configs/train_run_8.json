@@ -22,13 +22,6 @@
         }
       },
       {
-        "type": "BackgroundNoise",
-        "args": {
-          "noise": "rirs",
-          "p": 0.5
-        }
-      },
-      {
         "type": "Gain",
         "args": {
           "min_gain_in_db": -12.0,
