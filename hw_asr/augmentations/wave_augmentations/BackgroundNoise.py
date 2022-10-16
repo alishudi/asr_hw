@@ -5,6 +5,7 @@ from hw_asr.utils import ROOT_PATH
 import gzip
 import os, shutil
 from speechbrain.utils.data_utils import download_file
+import zipfile
 
 from hw_asr.augmentations.base import AugmentationBase
 
@@ -44,12 +45,15 @@ class BackgroundNoise(AugmentationBase):
         
         if noise == 'rirs':
             unzipped_path = data_dir / 'rirs_noises'
+            if not os.path.exists(unzipped_path):
+                with zipfile.ZipFile(gzip_path, 'r') as zip_ref:
+                    zip_ref.extractall(unzipped_path = data_dir / 'rirs_noises')
         else:
             unzipped_path = data_dir / 'musan.tar'
-        if not os.path.exists(unzipped_path):
-            with gzip.open(gzip_path, 'rb') as f_zipped:
-                with open(unzipped_path, 'wb') as f_unzipped:
-                    shutil.copyfileobj(f_zipped, f_unzipped)
-            print('Unzipped the noise data.')
+            if not os.path.exists(unzipped_path):
+                with gzip.open(gzip_path, 'rb') as f_zipped:
+                    with open(unzipped_path, 'wb') as f_unzipped:
+                        shutil.copyfileobj(f_zipped, f_unzipped)
+                print('Unzipped the noise data.')
 
         return unzipped_path
