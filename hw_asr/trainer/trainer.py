@@ -118,6 +118,7 @@ class Trainer(BaseTrainer):
                 self._log_predictions(**batch)
                 self._log_spectrogram(batch["spectrogram"])
                 self._log_scalars(self.train_metrics)
+                self._log_audio(batch, random.randint(0, len(batch["audio"]) - 1))
                 # we don't want to reset train metrics at the start of every epoch
                 # because we are interested in recent train metrics
                 last_train_metrics = self.train_metrics.result()
@@ -187,7 +188,6 @@ class Trainer(BaseTrainer):
             self._log_scalars(self.evaluation_metrics)
             self._log_predictions(is_val=True, **batch)
             self._log_spectrogram(batch["spectrogram"])
-            # self._log_audio(batch, random.randint(0, dataloader.batch_size - 1))
             self._log_audio(batch, random.randint(0, len(batch["audio"]) - 1))
 
         # add histogram of model parameters to the tensorboard
