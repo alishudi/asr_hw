@@ -46,6 +46,7 @@ class BackgroundNoise(AugmentationBase):
         if noise == 'rirs':
             unzipped_path = data_dir / 'rirs_noises'
             if not os.path.exists(unzipped_path):
+                unzipped_path.mkdir(exist_ok=True, parents=True)
                 with zipfile.ZipFile(gzip_path, 'r') as zip_ref:
                     zip_ref.extractall(unzipped_path = data_dir / 'rirs_noises')
         else:
