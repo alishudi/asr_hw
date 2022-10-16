@@ -5,8 +5,8 @@
 
 ```shell
 pip install -r ./requirements.txt
-python3 hw_asr/utils/util.py
 ```
+Download model from https://drive.google.com/file/d/19-HH878SpTFWugKdMeV4cf5f4PTyFrG3/view to default_test_model/checkpoint.pth i cant write a script for that in time.
 
 To test model on clean test:
 ```shell
