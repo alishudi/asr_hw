@@ -5,8 +5,16 @@
 
 ```shell
 pip install -r ./requirements.txt
+```
 
-!python3 test.py -c hw_asr/configs/test_clean.json -r /kaggle/working/1014_063424/checkpoint-epoch10.pth
+To test model on clean test:
+```shell
+python3 test.py -c hw_asr/default_test_clean_config.json -r default_test_model/checkpoint.pth
+```
+
+To test model on other test:
+```shell
+python3 test.py -c hw_asr/default_test_other_config.json -r default_test_model/checkpoint.pth
 ```
 
 To train the model run:
